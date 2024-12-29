@@ -1,8 +1,19 @@
 import 'package:eb_ojek_app/home_page.dart';
+import 'package:eb_ojek_app/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => OrderProvider()),
+      ],
+      child: const MaterialApp(
+        home: HomePage(),
+      ),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
