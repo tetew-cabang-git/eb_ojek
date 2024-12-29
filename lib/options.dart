@@ -15,6 +15,7 @@ class _OptionsButtonState extends State<OptionsButton> {
   Widget build(BuildContext context) {
     return Wrap(
       spacing: 8,
+      runSpacing: 8,
       children: [
         GestureDetector(
           onTap: () {
@@ -36,7 +37,7 @@ class _OptionsButtonState extends State<OptionsButton> {
             child: Text(
               'Ada Ekstrakurikuler',
               style: TextStyle(
-                  color: opt1 ? const Color(0xFFCB1010) : Colors.white),
+                  color: opt1 ? Colors.white : const Color(0xFFCB1010)),
             ),
           ),
         ),
@@ -55,12 +56,12 @@ class _OptionsButtonState extends State<OptionsButton> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
               border: Border.all(color: Colors.grey),
-              color: Colors.white,
+              color: opt2 ? const Color(0xFFCB1010) : Colors.white,
             ),
             child: Text(
               'Perubahan Dari Sekolah',
               style: TextStyle(
-                  color: opt2 ? const Color(0xFFCB1010) : Colors.white),
+                  color: opt2 ? Colors.white : const Color(0xFFCB1010)),
             ),
           ),
         ),
@@ -79,13 +80,13 @@ class _OptionsButtonState extends State<OptionsButton> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
               border: Border.all(color: Colors.grey),
-              color: Colors.white,
+              color: lainnyaPressed ? const Color(0xFFCB1010) : Colors.white,
             ),
             child: Text(
               'Lainnya',
               style: TextStyle(
                   color:
-                      lainnyaPressed ? const Color(0xFFCB1010) : Colors.white),
+                      lainnyaPressed ? Colors.white : const Color(0xFFCB1010)),
             ),
           ),
         ),
