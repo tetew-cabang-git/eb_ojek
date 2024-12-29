@@ -23,7 +23,7 @@ class OrderProvider with ChangeNotifier {
       customer: 'Fizi Dwi Rusli',
       day: 'Hari ini',
       waktu: '13:20',
-      status: true,
+      isActive: true,
     ),
     OrderEntity(
       tikJem: 'SD Wachid Hasyim Surabaya',
@@ -50,6 +50,11 @@ class OrderProvider with ChangeNotifier {
 
   void resetOrder() {
     _order = null;
+    notifyListeners();
+  }
+
+  void nonaktifkanOrder(int index) {
+    listData[index].isActive = false;
     notifyListeners();
   }
 }

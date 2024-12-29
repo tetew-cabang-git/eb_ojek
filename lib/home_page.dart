@@ -1,5 +1,6 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:eb_ojek_app/image_picker_widget.dart';
+import 'package:eb_ojek_app/options.dart';
 import 'package:eb_ojek_app/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:eb_ojek_app/order_entity.dart';
@@ -605,7 +606,6 @@ class HomePage extends StatelessWidget {
               ListTile(
                 title: const Text('Ganti driver lain'),
                 onTap: () {
-                  // Tambahkan aksi di sini
                   Navigator.pop(context);
                   _showUbahJamBottomSheet(context, index, order, 'Ubah Driver');
                 },
@@ -614,7 +614,6 @@ class HomePage extends StatelessWidget {
               ListTile(
                 title: const Text('Ubah jam'),
                 onTap: () {
-                  // Tambahkan aksi di sini
                   Navigator.pop(context);
                   _showUbahJamBottomSheet(
                       context, index, order, 'Ubah Jam Penjemputan');
@@ -624,7 +623,6 @@ class HomePage extends StatelessWidget {
               ListTile(
                 title: const Text('Nonaktifkan jadwal'),
                 onTap: () {
-                  // Tambahkan aksi di sini
                   Navigator.pop(context);
                   _showUbahJamBottomSheet(
                       context, index, order, 'Nonaktifkan Jadwal');
@@ -644,6 +642,14 @@ class HomePage extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  void _nonaktifkanJadwal(BuildContext context, int index) {
+    final provider = Provider.of<OrderProvider>(context, listen: false);
+    provider.nonaktifkanOrder(index); // Fungsi ini akan diperbarui di provider
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Jadwal berhasil dinonaktifkan')),
     );
   }
 
@@ -766,59 +772,7 @@ class HomePage extends StatelessWidget {
                   'Beritahu kami alasan customer mengubah jadwal ini, pilih salah satu',
                   textAlign: TextAlign.center,
                 ),
-                Wrap(
-                  spacing: 8,
-                  children: [
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          border: Border.all(color: Colors.grey),
-                          color: Colors.white,
-                        ),
-                        child: const Text('Ada Ekstrakurikuler'),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          border: Border.all(color: Colors.grey),
-                          color: Colors.white,
-                        ),
-                        child: const Text('Perubahan Dari Sekolah'),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          border: Border.all(color: Colors.grey),
-                          color: Colors.white,
-                        ),
-                        child: const Text('Lainnya'),
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.grey),
-                      ),
-                      child: TextFormField(
-                        controller: TextEditingController(),
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.all(8),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+                const OptionsButton(),
                 const SizedBox(height: 16),
                 const ImagePickerWithDottedBorder(),
                 const SizedBox(height: 16),
@@ -846,6 +800,9 @@ class HomePage extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () {
                           provider.updateOrderTime(index, newTime!);
+                          if (title.contains('Nonaktifkan')) {
+                            _nonaktifkanJadwal(context, index);
+                          }
 
                           Navigator.pop(context);
                         },
@@ -893,179 +850,183 @@ class HomePage extends StatelessWidget {
             itemCount: provider.listData.length,
             itemBuilder: (context, index) {
               final data = provider.listData[index];
-              return Container(
-                margin: const EdgeInsets.only(bottom: 16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: const Color(0xFFCAC6C6),
-                  ),
-                  color: Colors.white,
-                ),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 4,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.lightBlueAccent,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: const Row(
-                                  children: [
-                                    Icon(
-                                      Icons.motorcycle,
-                                      color: Color(0xFF388BB1),
-                                    ),
-                                    Text(
-                                      'Ride',
-                                      style: TextStyle(
-                                        color: Color(0xFF388BB1),
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const Spacer(),
-                              Text(
-                                data.waktu,
-                                style: const TextStyle(
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.location_on,
-                                size: 24,
-                                color: Colors.grey,
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  data.tikJem,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 12),
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.location_on,
-                                size: 24,
-                                color: Color(0xFFEE4959),
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  data.dest,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              const Text('Pengorder: '),
-                              Text(
-                                data.customer,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
+              return Opacity(
+                opacity: data.isActive ? 1.0 : 0.5,
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: const Color(0xFFCAC6C6),
                     ),
-                    Container(
-                      color: const Color(0xFFEFEEEE),
-                      width: double.infinity,
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    color: Colors.white,
+                  ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            if (data.day == 'Hari ini') ...[
-                              const Text('Ada Perubahan  ?'),
-                              Flexible(
-                                fit: FlexFit.tight,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor:
-                                              const Color(0xFFCB1010),
-                                          minimumSize:
-                                              const Size.fromHeight(36),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(100),
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                          _showOptionsDialog(
-                                              context, index, data);
-                                        },
-                                        child: const Text(
-                                          'Ubah Orderan',
-                                          style: TextStyle(color: Colors.white),
+                            Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.lightBlueAccent,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: const Row(
+                                    children: [
+                                      Icon(
+                                        Icons.motorcycle,
+                                        color: Color(0xFF388BB1),
+                                      ),
+                                      Text(
+                                        'Ride',
+                                        style: TextStyle(
+                                          color: Color(0xFF388BB1),
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                    ),
-                                    const Text(
-                                      '(Maksimal 1 jam sebelum penjemputan)',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Color(0xFF615555),
-                                      ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
-                            if (data.day == 'Besok') ...[
-                              const Text(
-                                'Hari penjemputan',
-                                style: TextStyle(color: Color(0xFF615555)),
-                              ),
-                              Text(
-                                data.day,
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
+                                const Spacer(),
+                                Text(
+                                  data.waktu,
+                                  style: const TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.location_on,
+                                  size: 24,
+                                  color: Colors.grey,
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    data.tikJem,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.location_on,
+                                  size: 24,
+                                  color: Color(0xFFEE4959),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    data.dest,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                const Text('Pengorder: '),
+                                Text(
+                                  data.customer,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              ],
+                            ),
                           ],
                         ),
                       ),
-                    ),
-                  ],
+                      Container(
+                        color: const Color(0xFFEFEEEE),
+                        width: double.infinity,
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              if (data.day == 'Hari ini' && data.isActive) ...[
+                                const Text('Ada Perubahan  ?'),
+                                Flexible(
+                                  fit: FlexFit.tight,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      SizedBox(
+                                        width: double.infinity,
+                                        child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                const Color(0xFFCB1010),
+                                            minimumSize:
+                                                const Size.fromHeight(36),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            _showOptionsDialog(
+                                                context, index, data);
+                                          },
+                                          child: const Text(
+                                            'Ubah Orderan',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                      const Text(
+                                        '(Maksimal 1 jam sebelum penjemputan)',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Color(0xFF615555),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                              if (data.day == 'Besok') ...[
+                                const Text(
+                                  'Hari penjemputan',
+                                  style: TextStyle(color: Color(0xFF615555)),
+                                ),
+                                Text(
+                                  data.day,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },

@@ -4,7 +4,7 @@ class OrderEntity {
   String customer;
   String day;
   String waktu;
-  bool status;
+  bool isActive;
 
   OrderEntity({
     required this.tikJem,
@@ -12,6 +12,6 @@ class OrderEntity {
     required this.customer,
     required this.day,
     required this.waktu,
-    this.status = false,
+    this.isActive = true,
   });
 }
